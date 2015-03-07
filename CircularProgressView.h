@@ -8,36 +8,21 @@
 //  http://www.nijino.cn
 
 #import <UIKit/UIKit.h>
-#import <AVFoundation/AVFoundation.h>
-
-@protocol CircularProgressViewDelegate <NSObject>
-
-@optional
-
-- (void)updateProgressViewWithPlayer:(AVAudioPlayer *)player;
-- (void)updatePlayOrPauseButton;
-- (void)playerDidFinishPlaying;
-
-@end
 
 @interface CircularProgressView : UIView
 
 @property (nonatomic) UIColor *backColor;
 @property (nonatomic) UIColor *progressColor;
-@property (nonatomic) NSURL *audioURL;
 @property (nonatomic) CGFloat lineWidth;
-@property (nonatomic) NSTimeInterval duration;
-@property (nonatomic) BOOL playOrPauseButtonIsPlaying;
-@property (nonatomic) id <CircularProgressViewDelegate> delegate;
+@property (nonatomic) CGFloat position;
+@property (nonatomic) CGFloat velocity;
 
 - (id)initWithFrame:(CGRect)frame
           backColor:(UIColor *)backColor
       progressColor:(UIColor *)progressColor
           lineWidth:(CGFloat)lineWidth
-           audioURL:(NSURL *)audioURL;
-
+           velocity:(CGFloat)velocity;
 - (void)play;
-- (void)pause;
 - (void)stop;
 
 @end

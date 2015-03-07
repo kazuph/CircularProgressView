@@ -10,10 +10,9 @@
 #import "CircularProgressView.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface CircularProgressView ()<AVAudioPlayerDelegate>
+@interface CircularProgressView ()
 
 @property (nonatomic) CADisplayLink *displayLink;
-@property (nonatomic) AVAudioPlayer *player;//an AVAudioPlayer instance
 @property (nonatomic) CAShapeLayer *progressLayer;
 @property (nonatomic) float progress;
 @property (nonatomic) CGFloat angle;//angle between two lines
@@ -26,17 +25,14 @@
           backColor:(UIColor *)backColor
       progressColor:(UIColor *)progressColor
           lineWidth:(CGFloat)lineWidth
-           audioURL:(NSURL *)audioURL {
+           velocity:(CGFloat)velocity {
     self = [super initWithFrame:frame];
     if (self) {
         [self setUp];
         _backColor = backColor;
         _progressColor = progressColor;
-        self.lineWidth = lineWidth;
-        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:audioURL error:nil];
-        _audioURL = audioURL;
-        _player.delegate = self;
-        [_player prepareToPlay];
+        _lineWidth = lineWidth;
+        _velocity = velocity;
     }
     return self;
 }
@@ -51,10 +47,6 @@
 
 - (void)setUp{
     self.backgroundColor = [UIColor clearColor];
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self addGestureRecognizer:tapGesture];
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-    [self addGestureRecognizer:panGesture];
 }
 
 - (void)setLineWidth:(CGFloat)lineWidth{
@@ -64,16 +56,6 @@
     _progressLayer = [self createRingLayerWithCenter:CGPointMake(CGRectGetWidth(self.frame) / 2, CGRectGetHeight(self.frame) / 2) radius:CGRectGetWidth(self.bounds) / 2 - lineWidth / 2 lineWidth:lineWidth color:self.progressColor];
     _progressLayer.strokeEnd = 0;
     [self.layer addSublayer:_progressLayer];
-}
-
-- (void)setAudioURL:(NSURL *)audioURL{
-    if (audioURL) {
-        self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:audioURL error:nil];
-        self.player.delegate = self;
-        self.duration = self.player.duration;
-        [self.player prepareToPlay];
-    }
-    _audioURL = audioURL;
 }
 
 - (CAShapeLayer *)createRingLayerWithCenter:(CGPoint)center radius:(CGFloat)radius lineWidth:(CGFloat)lineWidth color:(UIColor *)color {
@@ -103,80 +85,33 @@
 }
 
 - (void)updateProgressCircle{
-    //update progress value
-    self.progress = (float) (self.player.currentTime / self.player.duration);
-    if (self.delegate && [self.delegate conformsToProtocol:@protocol(CircularProgressViewDelegate)]) {
-        [self.delegate updateProgressViewWithPlayer:self.player];
+    self.progress = (float) (self.position / 100);
+    self.position += self.velocity;
+    if (self.position/100 > 1) {
+        [self replay];
     }
 }
 
 - (void)play{
-    if (!self.player.playing) {
-        if (!self.displayLink) {
-            self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateProgressCircle)];
-            self.displayLink.frameInterval = 6;
-            [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-        } else {
-            self.displayLink.paused = NO;
-        }
-        [self.player play];
+    if (!self.displayLink) {
+        self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateProgressCircle)];
+        self.displayLink.frameInterval = 6;
+        [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    } else {
+        self.displayLink.paused = NO;
     }
 }
 
-- (void)pause{
-    if (self.player.playing) {
-        self.displayLink.paused = YES;
-        [self.player pause];
-    }
+- (void)replay{
+    self.progress = 0;
+    self.position = 0;
 }
 
 - (void)stop{
-    [self.player stop];
     self.progress = 0;
-    self.player.currentTime = 0;
+    self.position = 0;
     [self.displayLink invalidate];
     self.displayLink = nil;
-}
-
-#pragma mark AVAudioPlayerDelegate method
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
-    if (flag) {
-        [self.displayLink invalidate];
-        self.displayLink = nil;
-        //restore progress value
-        self.progress = 0;
-        [self.delegate playerDidFinishPlaying];
-    }
-}
-
-- (void)handleTapGesture:(UITapGestureRecognizer *)recognizer{
-    CGPoint point = [recognizer locationInView:self];
-    self.angle = [self angleFromStartToPoint:point];
-    self.player.currentTime = self.player.duration * (self.angle / (2 * M_PI));
-    if (!self.player.playing) {
-        [self play];
-    }
-    [self.delegate updatePlayOrPauseButton];
-}
-
-- (void)handlePanGesture:(UIPanGestureRecognizer *)recognizer{
-    if (recognizer.state == UIGestureRecognizerStateChanged) {
-        self.displayLink.paused = YES;
-        CGPoint point = [recognizer locationInView:self];
-        self.angle = [self angleFromStartToPoint:point];
-        self.progress = self.angle/(M_PI * 2);
-        if (self.delegate && [self.delegate conformsToProtocol:@protocol(CircularProgressViewDelegate)]) {
-            [self.delegate updateProgressViewWithPlayer:self.player];
-        }
-    }
-
-    else if (recognizer.state == UIGestureRecognizerStateEnded) {
-        self.player.currentTime = self.player.duration * (self.angle / (2 * M_PI));
-        if (!self.player.playing) [self play];
-        else
-            self.displayLink.paused = NO;
-        [self.delegate updatePlayOrPauseButton];
-    }
 }
 
 //calculate angle between start to point

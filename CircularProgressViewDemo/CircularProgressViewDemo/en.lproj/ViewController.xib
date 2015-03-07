@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6206.8" systemVersion="14A329f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ViewController">
             <connections>
                 <outlet property="circularProgressView" destination="8PN-fk-5V3" id="zIh-8s-NBc"/>
-                <outlet property="playOrPauseButton" destination="8" id="GLP-Xn-aAi"/>
-                <outlet property="songTitle" destination="itF-JM-ZVF" id="0bQ-KE-WKw"/>
-                <outlet property="timeLabel" destination="16" id="17"/>
                 <outlet property="view" destination="6" id="7"/>
             </connections>
         </placeholder>
@@ -46,16 +44,6 @@
                         <action selector="clickStop:" destination="-1" eventType="touchUpInside" id="Yo9-iN-vhX"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="16" userLabel="timeLabel">
-                    <rect key="frame" x="0.0" y="384" width="320" height="24"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="24" id="gnZ-pE-Y89"/>
-                        <constraint firstAttribute="width" constant="320" id="xPX-yA-X3E"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8PN-fk-5V3" customClass="CircularProgressView">
                     <rect key="frame" x="45" y="123" width="230" height="230"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -64,28 +52,14 @@
                         <constraint firstAttribute="width" constant="230" id="p8J-1m-AIV"/>
                     </constraints>
                 </view>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="itF-JM-ZVF" userLabel="Song Title Label" colorLabel="IBBuiltInLabel-Orange">
-                    <rect key="frame" x="82" y="75" width="156" height="21"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="21" id="ZTi-Gp-rYr"/>
-                        <constraint firstAttribute="width" constant="156" id="dOf-B7-WWX"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
             <constraints>
-                <constraint firstAttribute="centerX" secondItem="itF-JM-ZVF" secondAttribute="centerX" id="SSW-Eb-dRx"/>
-                <constraint firstItem="8PN-fk-5V3" firstAttribute="top" secondItem="itF-JM-ZVF" secondAttribute="bottom" constant="27" id="X0v-QY-Jni"/>
-                <constraint firstItem="16" firstAttribute="top" secondItem="8PN-fk-5V3" secondAttribute="bottom" constant="31" id="eGe-tM-bMG"/>
                 <constraint firstAttribute="bottom" secondItem="8" secondAttribute="bottom" constant="29" id="edN-jZ-cIc"/>
                 <constraint firstItem="8" firstAttribute="leading" secondItem="6" secondAttribute="leading" constant="82" id="ixW-Z3-iDS"/>
                 <constraint firstAttribute="trailing" secondItem="12" secondAttribute="trailing" constant="84" id="kkY-Cg-7as"/>
                 <constraint firstAttribute="centerX" secondItem="8PN-fk-5V3" secondAttribute="centerX" id="onX-cT-Q21"/>
                 <constraint firstAttribute="bottom" secondItem="12" secondAttribute="bottom" constant="29" id="oqV-pp-4Ht"/>
-                <constraint firstAttribute="centerX" secondItem="16" secondAttribute="centerX" id="sHE-IT-2yS"/>
                 <constraint firstAttribute="centerY" secondItem="8PN-fk-5V3" secondAttribute="centerY" constant="46" id="v29-Kn-HXV"/>
             </constraints>
         </view>
@@ -98,9 +72,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4">
-            <size key="portraitSize" width="320" height="568"/>
-            <size key="landscapeSize" width="568" height="320"/>
-        </simulatedScreenMetrics>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>

@@ -160,7 +160,7 @@
 				ORGANIZATIONNAME = YangYubin;
 				TargetAttributes = {
 					D643A85E16E1A83C00CDCFFB = {
-						DevelopmentTeam = 295AG8677N;
+						DevelopmentTeam = Y9W9ZM278A;
 						SystemCapabilities = {
 							com.apple.InterAppAudio = {
 								enabled = 0;
